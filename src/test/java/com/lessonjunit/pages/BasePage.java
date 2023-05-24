@@ -23,6 +23,4 @@ public class BasePage {
         locationIcon.click();
         return this;
     }
-
-
 }

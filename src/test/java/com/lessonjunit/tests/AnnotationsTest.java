@@ -1,13 +1,19 @@
 package com.lessonjunit.tests;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
+
+import com.codeborne.selenide.CollectionCondition;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.*;
+import com.codeborne.selenide.WebDriverRunner;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 @DisplayName("Тесты урока JUnit")
 public class AnnotationsTest extends TestBaseTest{
@@ -60,5 +66,46 @@ public class AnnotationsTest extends TestBaseTest{
     void authTest() {
         basePage.openPage()
                 .clickLoginIcon();
+    }
+
+    //Тест с аннотацией @ValueSource
+    @ValueSource(strings ={
+            "Модельный ряд",
+            "Покупателям",
+            "Владельцам"
+    })
+    @ParameterizedTest(name = "При выборе хедера: {0} в урле отображается текст https://www.lada.ru/")
+    @Tags({
+            @Tag("WEB"),
+            @Tag("Smokus")
+    })
+    void headersTest(String header) {
+        open("https://www.lada.ru/");
+        $(".styles_navList__2gE6Y").$(byText(header)).click();
+        $(".styles_navList__2gE6Y").$(byText(header)).click();
+        $(".styles_navList__2gE6Y").$(byText(header)).click();
+        url().equals("https://www.lada.ru/");
+    }
+
+    //Тест с аннотацией @MethodSource
+    static Stream<Arguments> methodSourceTest() {
+        return Stream.of(
+            Arguments.of(
+                    "Подбор автомобиля", List.of("Автомобили в наличии", "Конфигуратор", "Сравнение комплектаций", "Оценка стоимости Trade-In", "Пройти тест-драйв", "LADA Технологии", "Новая или подержанная", "Проверка ПТС")
+            ),
+            Arguments.of(
+                    "Выгодная покупка", List.of("Акции и спецпредложения", "Кредитный калькулятор", "Программы автокредитования", "Максимальная выгода", "LADA Страхование", "Сервисный контракт LADA")
+            )
+        );
+    }
+    @MethodSource
+    @ParameterizedTest
+    void methodSourceTest(String offers, List<String> services) {
+        open("https://www.lada.ru/");
+        $(".styles_navList__2gE6Y").$(byText("Покупателям")).click();
+        $(".styles_tabs__2Yw0u").$(byText(offers)).click();
+
+        $$(".styles_items__1h15r a").shouldHave(CollectionCondition.texts(services));
+
     }
 }
