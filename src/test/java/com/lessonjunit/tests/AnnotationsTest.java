@@ -104,8 +104,6 @@ public class AnnotationsTest extends TestBaseTest{
         open("https://www.lada.ru/");
         $(".styles_navList__2gE6Y").$(byText("Покупателям")).click();
         $(".styles_tabs__2Yw0u").$(byText(offers)).click();
-
         $$(".styles_items__1h15r a").shouldHave(CollectionCondition.texts(services));
-
     }
 }
