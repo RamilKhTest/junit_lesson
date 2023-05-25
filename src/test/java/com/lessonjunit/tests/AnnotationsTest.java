@@ -4,6 +4,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.codeborne.selenide.CollectionCondition;
 import org.junit.jupiter.api.*;
@@ -81,10 +82,10 @@ public class AnnotationsTest extends TestBaseTest{
     })
     void headersTest(String header) {
         open("https://www.lada.ru/");
+        String url = "https://www.lada.ru/";
+        String currentUrl = WebDriverRunner.getWebDriver().getCurrentUrl();
         $(".styles_navList__2gE6Y").$(byText(header)).click();
-        $(".styles_navList__2gE6Y").$(byText(header)).click();
-        $(".styles_navList__2gE6Y").$(byText(header)).click();
-        url().equals("https://www.lada.ru/");
+        assertEquals(url, currentUrl);
     }
 
     //Тест с аннотацией @MethodSource
